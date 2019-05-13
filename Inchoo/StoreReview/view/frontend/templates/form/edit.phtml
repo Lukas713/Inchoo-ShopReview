@@ -1,0 +1,37 @@
+<?php
+/**
+ * @var \Inchoo\StoreReview\Block\Customer\Form $block
+ */
+?>
+<form class="form" action="<?= $block->getEditPage() ?>" id="ticket-form" method="post"
+      data-hasrequired="* Required Fields">
+    <fieldset class="fieldset">
+        <div class="field name required">
+            <label class="label" for="subject">
+                <span><?=$block->escapeHtml('Title')?></span>
+            </label>
+            <div class="control">
+                <input name="review_title" id="review_title"
+                       title="Review title" value=""
+                       class="input-text" type="text"/>
+            </div>
+        </div>
+        <div class="field name required">
+            <label class="label" for="message">
+                <span><?=$block->escapeHtml('Content')?></span>
+            </label>
+            <div class="control">
+                <textarea name="review_content" id="review_content"
+                          title="Review Content"
+                          class="input-text" type="text"></textarea>
+            </div>
+        </div>
+    </fieldset>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" title="Save" class="action submit primary" name="submit">
+                <span><?= $block->escapeHtml('Submit');?></span>
+            </button>
+        </div>
+    </div>
+</form>
