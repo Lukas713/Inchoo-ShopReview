@@ -1,6 +1,6 @@
 <?php
 
-namespace Inchoo\StoreReview\Block;
+namespace Inchoo\StoreReview\Block\Customer;
 
 use Magento\Framework\View\Element\Template;
 
