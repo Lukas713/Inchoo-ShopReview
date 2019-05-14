@@ -7,10 +7,9 @@ use Magento\Framework\Model\AbstractModel;
 
 class StoreReview extends AbstractModel implements StoreReviewInterface
 {
-
     public function _construct()
     {
-        $this->_init(\Inchoo\StoreReview\Model\ResourceModel\StoreReview::class);
+        $this->_init(ResourceModel\StoreReview::class);
     }
 
     public function setContent($content)

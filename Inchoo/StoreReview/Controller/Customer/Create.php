@@ -13,11 +13,10 @@ class Create extends Action
      */
     private $pageFactory;
 
-    public function __construct
-    (
+    public function __construct(
         Context $context,
-        PageFactory $pageFactory)
-    {
+        PageFactory $pageFactory
+    ) {
         parent::__construct($context);
         $this->pageFactory = $pageFactory;
     }

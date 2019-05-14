@@ -2,6 +2,7 @@
 
 namespace Inchoo\StoreReview\Controller\Customer;
 
+use Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory;
 use Inchoo\StoreReview\Model\StoreReviewRepository;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -26,15 +27,12 @@ class Index extends Action
      */
     private $session;
 
-
-    public function __construct
-    (
+    public function __construct(
         Context $context,
         PageFactory $pageFactory,
         StoreReviewRepository $storeReviewRepository,
-        \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory
-    )
-    {
+        StoreReviewInterfaceFactory $storeReviewInterfaceFactory
+    ) {
         parent::__construct($context);
         $this->pageFactory = $pageFactory;
         $this->storeReviewRepository = $storeReviewRepository;
@@ -43,10 +41,6 @@ class Index extends Action
 
     public function execute()
     {
-        /** @var \Inchoo\StoreReview\Api\Data\StoreReviewInterface $model */
-        $model = $this->storeReviewInterfaceFactory->create();
-        $model->setApproved(true);
-        $this->storeReviewRepository->save($model);
         return $this->pageFactory->create();
     }
 }

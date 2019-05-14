@@ -2,12 +2,20 @@
 
 namespace Inchoo\StoreReview\Model;
 
+use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
+use Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory;
+use Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 class StoreReviewRepository implements StoreReviewRepositoryInterface
 {
@@ -24,60 +32,61 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      */
     private $storeReviewResource;
     /**
-     * @var \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory
+     * @var StoreReviewSearchResultsInterfaceFactory
      */
     private $searchResultsInterfaceFactory;
     /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+    /**
+     * @var Session
+     */
+    private $session;
 
-    public function __construct
-    (
-        \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
+    /**
+     * StoreReviewRepository constructor.
+     * @param StoreReviewInterfaceFactory $storeReviewInterfaceFactory
+     * @param ResourceModel\StoreReview $storeReviewResource
+     * @param ResourceModel\StoreReview\CollectionFactory $collectionFactory
+     * @param StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     */
+    public function __construct(
+        StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
         \Inchoo\StoreReview\Model\ResourceModel\StoreReview $storeReviewResource,
-        \Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory $collectionFactory,
-        \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
-        CollectionProcessorInterface $collectionProcessor
-    )
-    {
+        CollectionFactory $collectionFactory,
+        StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        StoreManagerInterface $storeManager,
+        Session $session
+    ) {
         $this->storeReviewInterfaceFactory = $storeReviewInterfaceFactory;
         $this->collectionFactory = $collectionFactory;
         $this->storeReviewResource = $storeReviewResource;
         $this->searchResultsInterfaceFactory = $searchResultsInterfaceFactory;
         $this->collectionProcessor = $collectionProcessor;
-    }
-
-    /**
-     * Save news.
-     *
-     * @param \Inchoo\StoreReview\Api\Data\StoreReviewInterface $review
-     * @return \Inchoo\StoreReview\Api\Data\StoreReviewInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function save(StoreReview $review)
-    {
-        try {
-            $this->storeReviewResource->save($review);
-        }catch(CouldNotSaveException $exception){
-            throw new CouldNotSaveException(__($exception->getMessage()));
-        }
-        return $review;
+        $this->storeManager = $storeManager;
+        $this->session = $session;
     }
 
     /**
      * Delete news.
      *
-     * @param \Inchoo\StoreReview\Api\Data\StoreReviewInterface $review
+     * @param StoreReviewInterface $review
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function delete(StoreReview $review)
     {
         try {
             $this->storeReviewResource->delete($review);
             return true;
-        }catch (CouldNotDeleteException $exception){
+        } catch (CouldNotDeleteException $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
     }
@@ -86,26 +95,26 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      * Retrieve news.
      *
      * @param int
-     * @return \Inchoo\StoreReview\Api\Data\StoreReviewInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return StoreReviewInterface
+     * @throws LocalizedException
      */
     public function getById($id)
     {
         $model = $this->storeReviewInterfaceFactory->create();
         $this->storeReviewResource->load($model, $id);
-        if(!$model->getId()){
+        if (!$model->getId()) {
             throw new NoSuchEntityException(__('News with id "%1" does not exist.', $id));
         }
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Inchoo\StoreReview\Api\Data\StoreReviewInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return StoreReviewInterface[]
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection $collection */
+        /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -116,5 +125,39 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
         return $searchResult;
+    }
+
+    public function insertRecord($params = [])
+    {
+        try {
+            /** @var StoreReview $model */
+            $model = $this->storeReviewInterfaceFactory->create();
+            $store = $this->storeManager->getStore();
+            $model->setContent($params[StoreReviewInterface::CONTENT]);
+            $model->setTitle($params[StoreReviewInterface::TITLE]);
+            $model->setStore($store->getId());
+            $model->setWebsite($store->getWebsiteId());
+            $model->setCustomer($this->session->getCustomerId());
+            $this->save($model);
+        } catch (CouldNotSaveException $exception) {
+            var_dump($exception->getMessage());
+        }
+    }
+
+    /**
+     * Save news.
+     *
+     * @param StoreReviewInterface $review
+     * @return StoreReviewInterface
+     * @throws LocalizedException
+     */
+    public function save(StoreReview $review)
+    {
+        try {
+            $this->storeReviewResource->save($review);
+        } catch (CouldNotSaveException $exception) {
+            throw new CouldNotSaveException(__($exception->getMessage()));
+        }
+        return $review;
     }
 }

@@ -11,7 +11,8 @@ class Index extends Template
         parent::__construct($context, $data);
     }
 
-    public function getCreatePage(){
+    public function getCreatePage()
+    {
         return $this->getUrl('store_review/customer/create');
     }
 }

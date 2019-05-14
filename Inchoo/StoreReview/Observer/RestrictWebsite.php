@@ -2,28 +2,30 @@
 
 namespace Inchoo\StoreReview\Observer;
 
-use Magento\Backend\Model\Auth\Session;
+use Magento\Customer\Model\Context;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Model\Context;
+use Magento\Framework\UrlFactory;
 
 /**
- * https://inchoo.net/magento/restrict-website-access-require-log/
  * Class RestrictWebsite
  * @package Inchoo\StoreReview\Observer
  */
 class RestrictWebsite implements ObserverInterface
 {
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $eventManager;
     /**
-     * @var \Magento\Framework\App\Response\Http
+     * @var Http
      */
     private $response;
     /**
-     * @var \Magento\Framework\UrlFactory
+     * @var UrlFactory
      */
     private $urlFactory;
     /**
@@ -31,19 +33,17 @@ class RestrictWebsite implements ObserverInterface
      */
     private $context;
     /**
-     * @var \Magento\Framework\App\ActionFlag
+     * @var ActionFlag
      */
     private $actionFlag;
 
-    public function __construct
-    (
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\App\Response\Http $response,
-        \Magento\Framework\UrlFactory $urlFactory,
+    public function __construct(
+        ManagerInterface $eventManager,
+        Http $response,
+        UrlFactory $urlFactory,
         \Magento\Framework\App\Http\Context $context,
-        \Magento\Framework\App\ActionFlag $actionFlag
-    )
-    {
+        ActionFlag $actionFlag
+    ) {
         $this->eventManager = $eventManager;
         $this->response = $response;
         $this->urlFactory = $urlFactory;
@@ -76,5 +76,4 @@ class RestrictWebsite implements ObserverInterface
             $this->response->setRedirect($this->urlFactory->create()->getUrl('customer/account/login'));
         }
     }
-
 }
