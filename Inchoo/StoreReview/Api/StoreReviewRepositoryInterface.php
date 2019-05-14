@@ -40,4 +40,6 @@ interface StoreReviewRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
+
+    public function insertRecord($params = []);
 }

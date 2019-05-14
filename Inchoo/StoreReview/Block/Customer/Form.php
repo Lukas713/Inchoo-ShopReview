@@ -11,19 +11,18 @@ class Form extends Template
         parent::__construct($context, $data);
     }
 
-    public function frontPage(){
-        return "Hello World!";
+    public function frontPage()
+    {
+        return $this->getUrl('store_review/customer');
     }
 
-    public function getSavePage() {
+    public function getSavePage()
+    {
         return $this->getUrl('store_review/customer/save');
     }
 
-    public function getEditPage(){
+    public function getEditPage()
+    {
         return $this->getUrl('store_review/customer/edit');
-    }
-
-    public function getIndexPage(){
-        return $this->getUrl('store_review/customer');
     }
 }
