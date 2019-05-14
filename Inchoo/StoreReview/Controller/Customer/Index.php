@@ -2,45 +2,30 @@
 
 namespace Inchoo\StoreReview\Controller\Customer;
 
-use Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory;
-use Inchoo\StoreReview\Model\StoreReviewRepository;
-use Magento\Framework\App\Action\Action;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends Action
+class Index extends Redirecter
 {
     /**
      * @var PageFactory
      */
     private $pageFactory;
-    /**
-     * @var StoreReviewRepository
-     */
-    private $storeReviewRepository;
-    /**
-     * @var StoreReviewInterfaceFactory
-     */
-    private $storeReviewInterfaceFactory;
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $session;
+
 
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
-        StoreReviewRepository $storeReviewRepository,
-        StoreReviewInterfaceFactory $storeReviewInterfaceFactory
+        Session $session
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $session);
         $this->pageFactory = $pageFactory;
-        $this->storeReviewRepository = $storeReviewRepository;
-        $this->storeReviewInterfaceFactory = $storeReviewInterfaceFactory;
     }
 
     public function execute()
     {
+        $this->redirectIfNotLogged();
         return $this->pageFactory->create();
     }
 }

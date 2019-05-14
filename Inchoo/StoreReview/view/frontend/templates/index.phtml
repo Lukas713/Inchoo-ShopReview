@@ -1,8 +1,9 @@
 <?php
-
 /**
  * @var \Inchoo\StoreReview\Block\Customer\Index $block
  */
+$results = $block->getReviews();
+
 ?>
 <div class="actions-toolbar">
     <div class="primary">
@@ -12,5 +13,30 @@
         </a>
     </div>
 </div>
-
-
+<br>
+    <div class="table-wrapper orders-history">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>Title</td>
+                <td>Created at</td>
+                <td>Updated at</td>
+                <td>Approved</td>
+                <td>Store</td>
+                <td>Action</td>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($results as $i): ?>
+            <tr>
+                <td><?=$block->escapeHtml($i->getTitle());?></td>
+                <td><?=$block->escapeHtml($i->getCreatedAt());?></td>
+                <td><?=$block->escapeHtml($i->getUpdatedAt());?></td>
+                <td><?=$block->escapeHtml($block->getApprovedString($i->getApproved()));?></td>
+                <td><?=$block->escapeHtml($block->getStoreWithId($i->getStore()));?></td>
+                <td><a href="<?=$block->escapeHtml($block->getEditUrl($i->getId()));?>">Edit</a></td>
+            </tr>
+            <?php endforeach;  ?>
+            </tbody>
+        </table>
+    </div>

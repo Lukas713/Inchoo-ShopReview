@@ -2,8 +2,15 @@
 /**
  * @var \Inchoo\StoreReview\Block\Customer\Form $block
  */
+$model = $block->checkCustomerAndReviewId();
 ?>
-<form class="form" action="<?= $block->getEditPage() ?>" id="ticket-form" method="post"
+<?php if(!$model): ?>
+
+    <?php
+    return;
+    else:
+        ?>
+<form class="form" action="<?= $block->getSavePage() ?>" id="ticket-form" method="post"
       data-hasrequired="* Required Fields">
     <fieldset class="fieldset">
         <div class="field name required">
@@ -12,7 +19,7 @@
             </label>
             <div class="control">
                 <input name="review_title" id="review_title"
-                       title="Review title" value=""
+                       title="Review title" value="<?=$block->escapeHtml($model->getTitle());?>"
                        class="input-text" type="text"/>
             </div>
         </div>
@@ -23,9 +30,10 @@
             <div class="control">
                 <textarea name="review_content" id="review_content"
                           title="Review Content"
-                          class="input-text" type="text"></textarea>
+                          class="input-text" type="text"><?=$block->escapeHtml($model->getContent());?></textarea>
             </div>
         </div>
+        <input type="hidden" name="store_review" value="<?=$block->escapeHtml($model->getId());?>">
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
@@ -35,3 +43,4 @@
         </div>
     </div>
 </form>
+<?php endif;?>

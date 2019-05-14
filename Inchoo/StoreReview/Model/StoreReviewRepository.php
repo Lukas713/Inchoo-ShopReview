@@ -3,11 +3,7 @@
 namespace Inchoo\StoreReview\Model;
 
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
-use Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory;
-use Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
-use Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection;
-use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -57,10 +53,10 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      */
     public function __construct(
-        StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
+        \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
         \Inchoo\StoreReview\Model\ResourceModel\StoreReview $storeReviewResource,
-        CollectionFactory $collectionFactory,
-        StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
+        \Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory $collectionFactory,
+        \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
         CollectionProcessorInterface $collectionProcessor,
         StoreManagerInterface $storeManager,
         Session $session
@@ -105,6 +101,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         if (!$model->getId()) {
             throw new NoSuchEntityException(__('News with id "%1" does not exist.', $id));
         }
+        return $model;
     }
 
     /**
@@ -114,7 +111,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var Collection $collection */
+        /** @var \Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection  $collection */
         $collection = $this->collectionFactory->create();
 
         $this->collectionProcessor->process($searchCriteria, $collection);
@@ -130,7 +127,11 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
     public function insertRecord($params = [])
     {
         try {
-            /** @var StoreReview $model */
+            $model = $this->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
+            $model->setContent($params[StoreReviewInterface::CONTENT]);
+            $model->setTitle($params[StoreReviewInterface::TITLE]);
+
+        } catch (\Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
             $store = $this->storeManager->getStore();
             $model->setContent($params[StoreReviewInterface::CONTENT]);
@@ -138,10 +139,9 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setStore($store->getId());
             $model->setWebsite($store->getWebsiteId());
             $model->setCustomer($this->session->getCustomerId());
-            $this->save($model);
-        } catch (CouldNotSaveException $exception) {
-            var_dump($exception->getMessage());
         }
+        $this->save($model);
+        return $model;
     }
 
     /**
