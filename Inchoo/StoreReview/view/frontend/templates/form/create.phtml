@@ -32,6 +32,9 @@
             <button type="submit" title="Save" class="action submit primary" name="submit">
                 <span><?= $block->escapeHtml('Submit');?></span>
             </button>
+            <button type="submit" title="Cancel" class="action submit secondary" name="submit">
+                <span><a href="<?= $block->frontPage(); ?>"><?= $block->escapeHtml('Cancel');?></a></span>
+            </button>
         </div>
     </div>
 </form>

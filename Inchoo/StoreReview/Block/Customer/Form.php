@@ -22,4 +22,8 @@ class Form extends Template
     public function getEditPage(){
         return $this->getUrl('store_review/customer/edit');
     }
+
+    public function getIndexPage(){
+        return $this->getUrl('store_review/customer');
+    }
 }

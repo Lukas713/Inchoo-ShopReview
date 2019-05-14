@@ -34,10 +34,6 @@ class RestrictWebsite implements ObserverInterface
      * @var \Magento\Framework\App\ActionFlag
      */
     private $actionFlag;
-    /**
-     * @var Session
-     */
-    private $session;
 
     public function __construct
     (
