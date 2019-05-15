@@ -24,10 +24,7 @@ class Form extends Template
      * @var MessageInterface
      */
     private $message;
-    /**
-     * @var UrlInterface
-     */
-    private $url;
+
     /**
      * @var ResponseFactory
      */
@@ -38,7 +35,6 @@ class Form extends Template
         StoreReviewRepositoryInterface $reviewRepository,
         Session $session,
         ManagerInterface $message,
-        UrlInterface $url,
         ResponseFactory $factory,
         array $data = []
     ) {
@@ -46,11 +42,10 @@ class Form extends Template
         $this->reviewRepository = $reviewRepository;
         $this->session = $session;
         $this->message = $message;
-        $this->url = $url;
         $this->factory = $factory;
     }
 
-    public function frontPage()
+    public function getFrontPage()
     {
         return $this->getUrl('store_review/customer');
     }
@@ -65,13 +60,18 @@ class Form extends Template
         return $this->getUrl('store_review/customer/edit');
     }
 
+    /**
+     * load review id
+     * @return bool|\Inchoo\StoreReview\Api\Data\StoreReviewInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function checkCustomerAndReviewId()
     {
         $id = $this->getRequest()->getParam('id');
         try {
             $model = $this->reviewRepository->getById($id);
             if ($model->getCustomer() != $this->session->getCustomerId()) {
-                $this->message->addErrorMessage("You dont have permission to do that");
+                $this->message->addErrorMessage("Wrong entity id");
                 return false;
             }
         } catch (NoSuchEntityException $exception) {

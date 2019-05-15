@@ -5,7 +5,7 @@
 $model = $block->checkCustomerAndReviewId();
 ?>
 <?php if(!$model): ?>
-
+<a href="<?=$block->getFrontPage();?>">Back</a>
     <?php
     return;
     else:

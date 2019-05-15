@@ -6,7 +6,9 @@ use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class Save extends Redirecter
 {
@@ -23,6 +25,10 @@ class Save extends Redirecter
      * @var Session
      */
     private $session;
+    /**
+     * @var Http
+     */
+    private $request;
 
     /**
      * Save constructor.
@@ -35,41 +41,35 @@ class Save extends Redirecter
         Context $context,
         StoreReviewRepositoryInterface $storeReviewRepository,
         Escaper $escaper,
-        Session $session
+        Session $session,
+        Http $request
     ) {
         parent::__construct($context, $session);
         $this->storeReviewRepository = $storeReviewRepository;
         $this->escaper = $escaper;
         $this->session = $session;
+        $this->request = $request;
     }
 
     public function execute()
     {
         $this->redirectIfNotLogged();
-        if ($this->getRequest()->getParam(StoreReviewInterface::TITLE) != ''
-                && $this->getRequest()->getParam(StoreReviewInterface::CONTENT) != '') {
-            $result = $this->getRequest()->getParams();
-            $result = $this->escapeHtml($result); 
-            if (!isset($result[StoreReviewInterface::STORE_REVIEW_ID])) {
-                $this->modelInsertRecord($result);
-            }
-            $model = $this->storeReviewRepository->getById($result[StoreReviewInterface::STORE_REVIEW_ID]);
-            if ($model->getCustomer() != $this->session->getCustomerId()) {
-                $this->messageManager->addErrorMessage("Wrong entity!");
+        $params = $this->escapeHtml($this->request->getPost()->toArray()
+        );
+        if (isset($params[StoreReviewInterface::STORE_REVIEW_ID])) {
+            try {
+                $model = $this->storeReviewRepository->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
+                if ($model->getCustomer() != $this->session->getCustomerId()) {
+                    $this->messageManager->addErrorMessage("Wrong entity id");
+                    return $this->_redirect("store_review/customer");
+                }
+            } catch (NoSuchEntityException $exception) {
+                $this->messageManager->addErrorMessage($exception->getMessage());
                 return $this->_redirect("store_review/customer");
             }
-            $this->modelInsertRecord($result);
         }
-        $this->messageManager->addNoticeMessage("All fields are required");
-        return $this->_redirect("store_review/customer/create");
-    }
-
-
-
-    protected function modelInsertRecord($review)
-    {
-        $this->storeReviewRepository->insertRecord($review);
-        $this->messageManager->addSuccessMessage("Successfully!");
+        $this->storeReviewRepository->insertRecord($params);
+        $this->messageManager->addSuccessMessage("Successfully");
         return $this->_redirect("store_review/customer");
     }
 
