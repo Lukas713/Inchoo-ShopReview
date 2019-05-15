@@ -46,15 +46,15 @@ class Create extends Redirecter
     {
         $this->redirectIfNotLogged();
         $id = $this->session->getCustomerId();
-        $store = $this->storeManager->getStore()->getId();
+        $website = $this->storeManager->getWebsite()->getId();
         $result = $this->reviewRepository->getByStore(
             [
-                StoreReviewInterface::STORE => $store,
+                StoreReviewInterface::WEBSITE => $website,
                 StoreReviewInterface::CUSTOMER => $id
             ]
         );
         if(!empty($result->getItems())){
-            $this->messageManager->addNoticeMessage("You can publish only one review per store");
+            $this->messageManager->addNoticeMessage("You can publish only one review per website");
             return $this->_redirect("store_review/customer");
         }
         return $this->pageFactory->create();

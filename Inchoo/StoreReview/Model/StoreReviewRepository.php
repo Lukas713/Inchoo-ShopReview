@@ -145,6 +145,12 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         return $searchResult;
     }
 
+    /**
+     * @param array $params
+     * @return StoreReviewInterface
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function insertRecord($params = [])
     {
         try {
@@ -161,8 +167,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setWebsite($store->getWebsiteId());
             $model->setCustomer($this->session->getCustomerId());
         }
-        $this->save($model);
-        return $model;
+        return $this->save($model);
     }
 
     /**
@@ -190,8 +195,8 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
     public function getByStore($params = [])
     {
         $filter = $this->filterBuilder->create();
-        $filter->setField(StoreReviewInterface::STORE);
-        $filter->setValue($params[StoreReviewInterface::STORE]);
+        $filter->setField(StoreReviewInterface::WEBSITE);
+        $filter->setValue($params[StoreReviewInterface::WEBSITE]);
 
         $filter1 = $this->filterBuilder->create();
         $filter1->setField(StoreReviewInterface::CUSTOMER);
