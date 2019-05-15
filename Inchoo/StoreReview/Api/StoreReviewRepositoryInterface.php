@@ -41,5 +41,14 @@ interface StoreReviewRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria);
 
+    /**
+     * Retrieve news.
+     *
+     * @param int
+     * @return \Inchoo\StoreReview\Api\Data\StoreReviewInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getByStore($id);
+
     public function insertRecord($params = []);
 }

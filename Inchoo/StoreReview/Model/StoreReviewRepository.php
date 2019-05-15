@@ -5,7 +5,10 @@ namespace Inchoo\StoreReview\Model;
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -43,6 +46,18 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      * @var Session
      */
     private $session;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+    /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
 
     /**
      * StoreReviewRepository constructor.
@@ -59,7 +74,10 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
         CollectionProcessorInterface $collectionProcessor,
         StoreManagerInterface $storeManager,
-        Session $session
+        Session $session,
+        SearchCriteriaBuilder $criteriaBuilder,
+        FilterGroupBuilder $filterGroupBuilder,
+        FilterBuilder $filterBuilder
     ) {
         $this->storeReviewInterfaceFactory = $storeReviewInterfaceFactory;
         $this->collectionFactory = $collectionFactory;
@@ -68,6 +86,9 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->storeManager = $storeManager;
         $this->session = $session;
+        $this->criteriaBuilder = $criteriaBuilder;
+        $this->filterGroupBuilder = $filterGroupBuilder;
+        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -130,7 +151,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model = $this->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
             $model->setContent($params[StoreReviewInterface::CONTENT]);
             $model->setTitle($params[StoreReviewInterface::TITLE]);
-
+            $model->setApproved(false);
         } catch (\Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
             $store = $this->storeManager->getStore();
@@ -159,5 +180,32 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             throw new CouldNotSaveException(__($exception->getMessage()));
         }
         return $review;
+    }
+
+    /**
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return StoreReviewInterface[]
+     * @throws LocalizedException
+     */
+    public function getByStore($params = [])
+    {
+        $filter = $this->filterBuilder->create();
+        $filter->setField(StoreReviewInterface::STORE);
+        $filter->setValue($params[StoreReviewInterface::STORE]);
+
+        $filter1 = $this->filterBuilder->create();
+        $filter1->setField(StoreReviewInterface::CUSTOMER);
+        $filter1->setValue($params[StoreReviewInterface::CUSTOMER]);
+
+        $this->filterGroupBuilder->addFilter($filter);
+        $filterGroup = $this->filterGroupBuilder->create();
+
+        $this->filterGroupBuilder->addFilter($filter1);
+        $filterGroup1 = $this->filterGroupBuilder->create();
+
+        $searchCriteria = $this->criteriaBuilder->create();
+        $searchCriteria->setFilterGroups([$filterGroup, $filterGroup1]);
+
+        return $this->getList($searchCriteria);
     }
 }

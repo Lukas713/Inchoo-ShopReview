@@ -2,9 +2,12 @@
 
 namespace Inchoo\StoreReview\Controller\Customer;
 
+use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
+use Inchoo\StoreReview\Model\StoreReviewRepository;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Create extends Redirecter
 {
@@ -12,19 +15,48 @@ class Create extends Redirecter
      * @var PageFactory
      */
     private $pageFactory;
+    /**
+     * @var StoreReviewRepository
+     */
+    private $reviewRepository;
+    /**
+     * @var Session
+     */
+    private $session;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     public function __construct(
         Context $context,
         Session $session,
-        PageFactory $pageFactory
+        PageFactory $pageFactory,
+        StoreReviewRepository $reviewRepository,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context, $session);
         $this->pageFactory = $pageFactory;
+        $this->reviewRepository = $reviewRepository;
+        $this->session = $session;
+        $this->storeManager = $storeManager;
     }
 
     public function execute()
     {
         $this->redirectIfNotLogged();
+        $id = $this->session->getCustomerId();
+        $store = $this->storeManager->getStore()->getId();
+        $result = $this->reviewRepository->getByStore(
+            [
+                StoreReviewInterface::STORE => $store,
+                StoreReviewInterface::CUSTOMER => $id
+            ]
+        );
+        if(!empty($result->getItems())){
+            $this->messageManager->addNoticeMessage("You can publish only one review per store");
+            return $this->_redirect("store_review/customer");
+        }
         return $this->pageFactory->create();
     }
 }
