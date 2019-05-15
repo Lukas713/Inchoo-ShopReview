@@ -4,7 +4,7 @@
  */
 ?>
 <form class="form" action="<?= $block->getSavePage() ?>" id="ticket-form" method="post"
-      data-hasrequired="* Required Fields">
+      data-mage-init='{"validation":{}}' data-hasrequired="* Required Fields">
     <fieldset class="fieldset">
         <div class="field name required">
             <label class="label" for="subject">
@@ -12,6 +12,7 @@
             </label>
             <div class="control">
                 <input name="review_title" id="review_title"
+                       data-validate='{"required":true}'
                        title="Review title" value=""
                        class="input-text" type="text"/>
             </div>
@@ -22,7 +23,8 @@
             </label>
             <div class="control">
                 <textarea name="review_content" id="review_content"
-                          title="Review Content"
+                          data-validate='{"required":true}'
+                            title="Review Content"
                           class="input-text" type="text"></textarea>
             </div>
         </div>
