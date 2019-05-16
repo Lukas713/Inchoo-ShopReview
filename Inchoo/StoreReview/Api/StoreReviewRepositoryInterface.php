@@ -51,4 +51,11 @@ interface StoreReviewRepositoryInterface
     public function getByStore($id);
 
     public function insertRecord($params = []);
+
+    /**
+     * Delete review with id
+     * @param int $id
+     * @return mixed|bool
+     */
+    public function deleteById($id);
 }

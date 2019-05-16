@@ -7,7 +7,6 @@
                 <resource id="Magento_Backend::content">
                     <resource id="Inchoo_StoreReview::manage_reviews" title="Manage Reviews">
                         <resource id="Inchoo_StoreReview::reviews" title="Approved Reviews" translate="reviews" sortOrder="100" />
-                        <resource id="Inchoo_StoreReview::pending_reviews" title="Pending Reviews" translate="pending reviews" sortOrder="100" />
                     </resource>
                 </resource>
             </resource>

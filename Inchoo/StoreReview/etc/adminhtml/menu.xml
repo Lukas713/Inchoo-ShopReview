@@ -3,7 +3,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Inchoo_StoreReview::manage_reviews" title="Manage Reviews" translate="reviews" module="Inchoo_StoreReview" sortOrder="300" parent="Magento_Backend::content" resource="Inchoo_StoreReview::manage_reviews"/>
-        <add id="Inchoo_StoreReview::reviews" title="Approved Reviews" translate="approved reviews" module="Inchoo_StoreReview" sortOrder="100" parent="Inchoo_StoreReview::manage_reviews" action="store_review/reviews/index" resource="Inchoo_StoreReview::reviews"/>
-        <add id="Inchoo_StoreReview::pending_reviews" title="Pending Reviews" translate="pending reviews" module="Inchoo_StoreReview" sortOrder="100" parent="Inchoo_StoreReview::manage_reviews" action="store_review/pending_reviews/index" resource="Inchoo_StoreReview::pending_reviews"/>
+        <add id="Inchoo_StoreReview::reviews" title="Reviews" translate="reviews" module="Inchoo_StoreReview" sortOrder="100" parent="Inchoo_StoreReview::manage_reviews" action="store_review/reviews/index" resource="Inchoo_StoreReview::reviews"/>
     </menu>
 </config>

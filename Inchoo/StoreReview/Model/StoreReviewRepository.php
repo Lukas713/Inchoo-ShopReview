@@ -157,7 +157,17 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model = $this->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
             $model->setContent($params[StoreReviewInterface::CONTENT]);
             $model->setTitle($params[StoreReviewInterface::TITLE]);
-            $model->setApproved(false);
+            if (isset($params[StoreReviewInterface::APPROVED])) {
+                $model->setApproved($params[StoreReviewInterface::APPROVED]);
+            } else {
+                $model->setApproved(false);
+            }
+            if (isset($params[StoreReviewInterface::SELECTED])) {
+                $model->setSelected($params[StoreReviewInterface::SELECTED]);
+            }
+            if (isset($params[StoreReviewInterface::STORE])) {
+                $model->setStore($params[StoreReviewInterface::STORE]);
+            }
         } catch (\Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
             $store = $this->storeManager->getStore();
@@ -212,5 +222,15 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         $searchCriteria->setFilterGroups([$filterGroup, $filterGroup1]);
 
         return $this->getList($searchCriteria);
+    }
+
+    public function deleteById($id)
+    {
+        try {
+            $model = $this->getById($id);
+        } catch (NoSuchEntityException $exception) {
+            throw new $exception();
+        }
+        return $this->delete($model);
     }
 }

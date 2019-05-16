@@ -17,8 +17,8 @@ class EditActions extends Column
                 $item[$this->getData('name')] = [
                     'edit' => [
                         'href' => $this->context->getUrl(
-                            'store_review/prending_reviews/edit',
-                            [StoreReviewInterface::STORE_REVIEW_ID => $item[StoreReviewInterface::STORE_REVIEW_ID]]
+                            'store_review/reviews/edit',
+                            ['id' => $item[StoreReviewInterface::STORE_REVIEW_ID]]
                         ),
                         'label' => __('Edit')
                     ]
