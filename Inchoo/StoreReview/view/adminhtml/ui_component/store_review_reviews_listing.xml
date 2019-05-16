@@ -11,6 +11,13 @@
         <deps>
             <dep>store_review_reviews_listing.store_review_reviews_listing_data_source</dep>
         </deps>
+        <buttons>
+            <button name="create">
+                <url path="store_review/reviews/create"/>
+                <label translate="true">Create new</label>
+                <class>primary</class>
+            </button>
+        </buttons>
     </settings>
     <dataSource name="store_review_reviews_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>

@@ -4,6 +4,7 @@ namespace Inchoo\StoreReview\Model;
 
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
+use Magento\Backend\Model\Auth;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
@@ -60,6 +61,11 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
     private $filterBuilder;
 
     /**
+     * @var Auth
+     */
+    private $auth;
+
+    /**
      * StoreReviewRepository constructor.
      * @param StoreReviewInterfaceFactory $storeReviewInterfaceFactory
      * @param ResourceModel\StoreReview $storeReviewResource
@@ -77,6 +83,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         Session $session,
         SearchCriteriaBuilder $criteriaBuilder,
         FilterGroupBuilder $filterGroupBuilder,
+        Auth $auth,
         FilterBuilder $filterBuilder
     ) {
         $this->storeReviewInterfaceFactory = $storeReviewInterfaceFactory;
@@ -89,6 +96,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         $this->criteriaBuilder = $criteriaBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->auth = $auth;
     }
 
     /**
@@ -157,16 +165,12 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model = $this->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
             $model->setContent($params[StoreReviewInterface::CONTENT]);
             $model->setTitle($params[StoreReviewInterface::TITLE]);
-            if (isset($params[StoreReviewInterface::APPROVED])) {
+            if($this->auth->isLoggedIn()){
                 $model->setApproved($params[StoreReviewInterface::APPROVED]);
-            } else {
-                $model->setApproved(false);
-            }
-            if (isset($params[StoreReviewInterface::SELECTED])) {
                 $model->setSelected($params[StoreReviewInterface::SELECTED]);
-            }
-            if (isset($params[StoreReviewInterface::STORE])) {
                 $model->setStore($params[StoreReviewInterface::STORE]);
+            }else {
+                $model->setApproved(false);
             }
         } catch (\Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
@@ -176,6 +180,9 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setStore($store->getId());
             $model->setWebsite($store->getWebsiteId());
             $model->setCustomer($this->session->getCustomerId());
+            if($this->auth->isLoggedIn()){
+                $model->setCustomer(null);
+            }
         }
         return $this->save($model);
     }

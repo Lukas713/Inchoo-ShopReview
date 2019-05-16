@@ -60,7 +60,6 @@
             <settings>
                 <label translate="true">Title</label>
                 <dataScope>review_title</dataScope>
-                <disabled>true</disabled>
             </settings>
         </input>
 
@@ -68,7 +67,6 @@
             <settings>
                 <label translate="true">Content</label>
                 <dataScope>review_content</dataScope>
-                <disabled>true</disabled>
             </settings>
         </textarea>
 
