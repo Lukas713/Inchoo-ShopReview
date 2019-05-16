@@ -3,24 +3,15 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">store_review_reviews_listing.store_review_reviews_listing_data_source</item>
+            <item name="provider" xsi:type="string">store_review_pending_reviews_listing.store_review_pending_reviews_listing_data_source</item>
         </item>
     </argument>
-
     <settings>
-        <buttons>
-            <button name="add">
-                <url path="*/*/new"/>
-                <class>primary</class>
-                <label translate="true">Add New</label>
-            </button>
-        </buttons>
         <spinner>store_review_reviews_columns</spinner>
         <deps>
             <dep>store_review_reviews_listing.store_review_reviews_listing_data_source</dep>
         </deps>
     </settings>
-
     <dataSource name="store_review_reviews_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
@@ -28,7 +19,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Inchoo_StoreReview::reviews</aclResource>
+        <aclResource>Inchoo_StoreReview::pending_reviews</aclResource>
         <dataProvider class="Inchoo\StoreReview\Ui\Component\Listing\DataProvider" name="store_review_reviews_listing_data_source">
             <settings>
                 <requestFieldName>store_review</requestFieldName>
@@ -36,7 +27,6 @@
             </settings>
         </dataProvider>
     </dataSource>
-
     <listingToolbar name="listing_top">
         <settings>
             <sticky>true</sticky>
@@ -55,6 +45,18 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Title</label>
+            </settings>
+        </column>
+        <column name="email">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="approved">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Approved</label>
             </settings>
         </column>
         <column name="created_at">

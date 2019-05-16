@@ -15,6 +15,8 @@ interface StoreReviewInterface
     const SELECTED = 'selected';
     const CONTENT = 'review_content';
     const TITLE = 'review_title';
+    const TRUE = true;
+    const FALSE = false;
 
     /**
      * @param string, title of the review

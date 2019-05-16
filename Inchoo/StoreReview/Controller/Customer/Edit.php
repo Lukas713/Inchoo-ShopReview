@@ -13,13 +13,11 @@ class Edit extends Redirecter
      */
     private $pageFactory;
 
-    public function __construct
-    (
+    public function __construct(
         Context $context,
         Session $session,
         PageFactory $pageFactory
-    )
-    {
+    ) {
         parent::__construct($context, $session);
         $this->pageFactory = $pageFactory;
     }
@@ -27,7 +25,7 @@ class Edit extends Redirecter
     public function execute()
     {
         $this->redirectIfNotLogged();
-        if($this->getRequest()->getParam('id') != ''){
+        if ($this->getRequest()->getParam('id') != '') {
             return $this->pageFactory->create();
         }
         $this->messageManager->addNoticeMessage("Something went wrong, please try again");

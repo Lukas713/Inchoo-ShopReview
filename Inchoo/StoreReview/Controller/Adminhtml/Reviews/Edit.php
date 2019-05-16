@@ -1,11 +1,11 @@
 <?php
 
-namespace Inchoo\StoreReview\Controller\Adminhtml\Pending\Reviews;
+namespace Inchoo\StoreReview\Controller\Adminhtml\Reviews;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends Action
+class Edit extends Action
 {
     /**
      * @var PageFactory
