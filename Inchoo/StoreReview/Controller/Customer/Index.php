@@ -5,6 +5,8 @@ namespace Inchoo\StoreReview\Controller\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+
 
 class Index extends Redirecter
 {
@@ -17,9 +19,10 @@ class Index extends Redirecter
     public function __construct(
         Context $context,
         PageFactory $pageFactory,
-        Session $session
+        Session $session,
+        Validator $validator
     ) {
-        parent::__construct($context, $session);
+        parent::__construct($context, $session, $validator);
         $this->pageFactory = $pageFactory;
     }
 

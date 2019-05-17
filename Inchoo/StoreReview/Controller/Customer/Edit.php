@@ -5,6 +5,8 @@ namespace Inchoo\StoreReview\Controller\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+
 
 class Edit extends Redirecter
 {
@@ -16,9 +18,10 @@ class Edit extends Redirecter
     public function __construct(
         Context $context,
         Session $session,
+        Validator $validator,
         PageFactory $pageFactory
     ) {
-        parent::__construct($context, $session);
+        parent::__construct($context, $session, $validator);
         $this->pageFactory = $pageFactory;
     }
 

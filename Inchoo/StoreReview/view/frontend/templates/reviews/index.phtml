@@ -2,7 +2,7 @@
     /**
      * @var \Inchoo\StoreReview\Block\Reviews\Index $block
      */
-        $results = $block->renderReviews();
+        $results = $block->getReviews();
     ?>
 <?php foreach($results as $storeReview):
     $created = $storeReview->getEmail() ?? $storeReview->getFakeCustomer();
@@ -10,7 +10,7 @@
     <div class="products wrapper grid products-grid">
         <div class="card-body" style="padding:2rem">
             <h3 class="card-title"><?=$block->escapeHtml($storeReview->getTitle());?></h3><hr>
-            <h2 class="card-subtitle mb-2 text-muted">Created: <?=$block->escapeHtml();?></h2>
+            <h2 class="card-subtitle mb-2 text-muted">Created: <?=$block->escapeHtml($created);?></h2>
             <p class="card-text"><?=$block->escapeHtml($storeReview->getContent());?></p>
             <a href="#" class="card-link">Card link</a>
             <a href="#" class="card-link">Another link</a>

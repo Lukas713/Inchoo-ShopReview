@@ -6,6 +6,7 @@ use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Model\StoreReviewRepository;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -33,9 +34,10 @@ class Create extends Redirecter
         Session $session,
         PageFactory $pageFactory,
         StoreReviewRepository $reviewRepository,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Validator $validator
     ) {
-        parent::__construct($context, $session);
+        parent::__construct($context, $session, $validator);
         $this->pageFactory = $pageFactory;
         $this->reviewRepository = $reviewRepository;
         $this->session = $session;
@@ -53,7 +55,7 @@ class Create extends Redirecter
                 StoreReviewInterface::CUSTOMER => $id
             ]
         );
-        if(!empty($result->getItems())){
+        if (!empty($result->getItems())) {
             $this->messageManager->addNoticeMessage("You can publish only one review per website");
             return $this->_redirect("store_review/customer");
         }
