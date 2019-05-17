@@ -22,14 +22,12 @@ class Save extends Action
      */
     private $escaper;
 
-    public function __construct
-    (
+    public function __construct(
         Action\Context $context,
         Http $request,
         StoreReviewRepositoryInterface $storeReviewRepository,
         Escaper $escaper
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->request = $request;
         $this->storeReviewRepository = $storeReviewRepository;
@@ -38,8 +36,8 @@ class Save extends Action
 
     public function execute()
     {
-        $params = $this->request->getPost()->toArray();
-        $this->storeReviewRepository->insertRecord($this->escapeHtml($params));
+        $params = $this->escapeHtml($this->request->getPost()->toArray());
+        $this->storeReviewRepository->insertRecord($params);
         $this->messageManager->addSuccessMessage("Successful");
         return $this->_redirect("store_review/reviews/index");
     }

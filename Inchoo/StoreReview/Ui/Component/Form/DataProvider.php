@@ -20,6 +20,14 @@ class DataProvider extends AbstractDataProvider
 
     public function getData()
     {
+        $joinCondition = 'main_table.customer = customer_entity.entity_id';
+        $this->collection->getSelect(
+
+        )->joinLeft(
+            'customer_entity',
+            $joinCondition,
+            []
+        )->columns('customer_entity.email');
         $data = $this->getCollection()->getFirstItem();
         if ($data->getId()) {
             $data[$data->getId()] = $data->toArray();

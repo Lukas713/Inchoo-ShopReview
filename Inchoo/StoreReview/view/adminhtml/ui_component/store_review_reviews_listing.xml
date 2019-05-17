@@ -40,7 +40,75 @@
         </settings>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All Store Views</caption>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_review</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
         <paging name="listing_paging"/>
+        <massaction name="listing_massaction"
+                    component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="approve">
+                <settings>
+                    <confirm>
+                        <message translate="true">Approve selected items?</message>
+                        <title translate="true">Approve items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massApprove"/>
+                    <type>approve</type>
+                    <label translate="true">Approve</label>
+                </settings>
+            </action>
+            <action name="select">
+                <settings>
+                    <confirm>
+                        <message translate="true">Select selected items?</message>
+                        <title translate="true">Select items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massSelect"/>
+                    <type>select</type>
+                    <label translate="true">Select</label>
+                </settings>
+            </action>
+            <action name="unselect">
+                <settings>
+                    <confirm>
+                        <message translate="true">Unselect selected items?</message>
+                        <title translate="true">Unselect items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massUnselect"/>
+                    <type>unselect</type>
+                    <label translate="true">Unselect</label>
+                </settings>
+            </action>
+            <action name="disapprove">
+                <settings>
+                    <confirm>
+                        <message translate="true">Disapprove selected items?</message>
+                        <title translate="true">Disapprove items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massDisapprove"/>
+                    <type>disapprove</type>
+                    <label translate="true">Disapprove</label>
+                </settings>
+            </action>
+        </massaction>
     </listingToolbar>
     <columns name="store_review_reviews_columns">
         <selectionsColumn name="ids">
@@ -60,10 +128,22 @@
                 <label translate="true">Email</label>
             </settings>
         </column>
+        <column name="fake_customer">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Fake Email</label>
+            </settings>
+        </column>
         <column name="approved">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Approved</label>
+            </settings>
+        </column>
+        <column name="selected">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Selected</label>
             </settings>
         </column>
         <column name="created_at">

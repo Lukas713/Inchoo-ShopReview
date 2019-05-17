@@ -6,6 +6,7 @@ interface StoreReviewInterface
 {
     const STORE_REVIEW_TABLE_NAME = 'Inchoo_StoreReview';
     const STORE_REVIEW_ID = 'store_review';
+    const FAKE_CUSTOMER = 'fake_customer';
     const WEBSITE = 'store_website';
     const CUSTOMER = 'customer';
     const STORE = 'store';
@@ -17,6 +18,7 @@ interface StoreReviewInterface
     const TITLE = 'review_title';
     const TRUE = true;
     const FALSE = false;
+
 
     /**
      * @param string, title of the review
@@ -73,6 +75,12 @@ interface StoreReviewInterface
     public function setSelected($bool);
 
     /**
+     * @param int $id
+     * @return $this
+     */
+    public function setFakeCustomer($id);
+
+    /**
      * @return int
      */
     public function getId();
@@ -121,4 +129,9 @@ interface StoreReviewInterface
      * @return string
      */
     public function getContent();
+
+    /**
+     * @return string
+     */
+    public function getFakeCustomer();
 }

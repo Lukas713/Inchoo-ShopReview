@@ -3,7 +3,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">store_review_reviews_form.store_review_reviews_form_data_source</item>
+            <item name="provider" xsi:type="string">store_review_reviews_edit_form.store_review_reviews_edit_form_data_source</item>
         </item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
     </argument>
@@ -12,7 +12,7 @@
         <namespace>store_review_pending_reviews_form</namespace>
         <dataScope>data</dataScope>
         <deps>
-            <dep>store_review_reviews_form.store_review_reviews_form_data_source</dep>
+            <dep>store_review_reviews_edit_form.store_review_reviews_edit_form_data_source</dep>
         </deps>
 
         <buttons>
@@ -28,7 +28,7 @@
         </buttons>
     </settings>
 
-    <dataSource name="store_review_reviews_form_data_source">
+    <dataSource name="store_review_reviews_edit_form_data_source">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
@@ -37,7 +37,7 @@
         <settings>
             <submitUrl path="store_review/reviews/save"/>
         </settings>
-        <dataProvider class="Inchoo\StoreReview\Ui\Component\Form\DataProvider" name="store_review_reviews_form_data_source">
+        <dataProvider class="Inchoo\StoreReview\Ui\Component\Form\DataProvider" name="store_review_reviews_edit_form_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>store_review</primaryFieldName>
@@ -56,10 +56,11 @@
             </settings>
         </hidden>
 
-        <input name="fake_customer" sortOrder="10">
+        <input name="email" sortOrder="10">
             <settings>
-                <label translate="true">Fake Customer Email</label>
-                <dataScope>fake_customer</dataScope>
+                <label translate="true">Email</label>
+                <dataScope>email</dataScope>
+                <disabled>true</disabled>
             </settings>
         </input>
 

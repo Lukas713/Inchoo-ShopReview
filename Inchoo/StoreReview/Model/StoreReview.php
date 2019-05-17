@@ -77,6 +77,15 @@ class StoreReview extends AbstractModel implements StoreReviewInterface
     }
 
     /**
+     * @param int $id
+     * @return $this
+     */
+    public function setFakeCustomer($email)
+    {
+        return $this->setData(self::FAKE_CUSTOMER, $email);
+    }
+
+    /**
      * @param bool
      * @return StoreReviewInterface
      */
@@ -163,5 +172,13 @@ class StoreReview extends AbstractModel implements StoreReviewInterface
     public function getTitle()
     {
         return $this->getData(self::TITLE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFakeCustomer()
+    {
+        return $this->getData(self::FAKE_CUSTOMER);
     }
 }

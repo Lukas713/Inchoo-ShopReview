@@ -1,5 +1,4 @@
 <?php
-
 namespace Inchoo\StoreReview\Ui\Component\Listing;
 
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
@@ -44,19 +43,15 @@ class DataProvider extends AbstractDataProvider
     public function getData()
     {
         $this->collection->setOrder(StoreReviewInterface::CREATED_AT, AbstractDb::SORT_ORDER_DESC);
-        $this->collection->getSelect()->group(StoreReviewInterface::APPROVED);
+        $joinCondition = 'main_table.customer = customer_entity.entity_id';
+        $this->collection->getSelect(
+
+        )->joinLeft(
+            'customer_entity',
+            $joinCondition,
+            []
+        )->columns('customer_entity.email');
         $data = $this->collection->toArray();
-        if(!$this->auth->isLoggedIn()){
-            foreach ($data as $key) {
-                if (!is_array($key)) {
-                    continue;
-                }
-                foreach ($key as $item => $value) {
-                    $model = $this->customerRepository->getById($value[StoreReviewInterface::CUSTOMER]);
-                    $data['items'][$item]['email'] = $model->getEmail();
-                }
-            }
-        }
         return $data;
     }
 }

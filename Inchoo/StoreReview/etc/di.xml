@@ -4,7 +4,8 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults"/>
-    <preference for="Inchoo\StoreReview\Api\Data\StoreReviewInterface" type="Inchoo\StoreReview\Model\StoreReview"/>
+    <preference for="Inchoo\StoreReview\Api\Data\StoreReviewInterface"
+                type="Inchoo\StoreReview\Model\StoreReview"/>
     <preference for="Inchoo\StoreReview\Api\StoreReviewRepositoryInterface"
                 type="Inchoo\StoreReview\Model\StoreReviewRepository"/>
 </config>

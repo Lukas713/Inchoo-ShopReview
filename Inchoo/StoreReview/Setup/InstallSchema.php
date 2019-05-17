@@ -2,6 +2,7 @@
 
 namespace Inchoo\StoreReview\Setup;
 
+use Inchoo\StoreReview\Api\Data\FakeCustomerInterface;
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
@@ -13,10 +14,11 @@ class InstallSchema implements InstallSchemaInterface
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+        $table = $setup->getConnection(
 
-        $table = $setup->getConnection()
-            ->newTable(StoreReviewInterface::STORE_REVIEW_TABLE_NAME)
-            ->addColumn(
+        )->newTable(
+            StoreReviewInterface::STORE_REVIEW_TABLE_NAME
+        )->addColumn(
                 StoreReviewInterface::STORE_REVIEW_ID,
                 Table::TYPE_INTEGER,
                 null,
@@ -76,6 +78,10 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['default' => false, 'nullable' => false],
                 'is this review selected on frontend'
+            )->addColumn(
+                    StoreReviewInterface::FAKE_CUSTOMER,
+                    Table::TYPE_TEXT,
+                    255
             )->addForeignKey(
                 $setup->getFkName(
                     StoreReviewInterface::STORE_REVIEW_TABLE_NAME,
@@ -110,7 +116,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 Table::ACTION_CASCADE
             );
-
         $setup->getConnection()->createTable($table);
         $setup->endSetup();
     }

@@ -67,11 +67,17 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
 
     /**
      * StoreReviewRepository constructor.
-     * @param StoreReviewInterfaceFactory $storeReviewInterfaceFactory
+     * @param \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory
      * @param ResourceModel\StoreReview $storeReviewResource
      * @param ResourceModel\StoreReview\CollectionFactory $collectionFactory
-     * @param StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory
+     * @param \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param StoreManagerInterface $storeManager
+     * @param Session $session
+     * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
+     * @param Auth $auth
+     * @param FilterBuilder $filterBuilder
      */
     public function __construct(
         \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
@@ -165,13 +171,11 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model = $this->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
             $model->setContent($params[StoreReviewInterface::CONTENT]);
             $model->setTitle($params[StoreReviewInterface::TITLE]);
-            if($this->auth->isLoggedIn()){
-                $model->setApproved($params[StoreReviewInterface::APPROVED]);
-                $model->setSelected($params[StoreReviewInterface::SELECTED]);
-                $model->setStore($params[StoreReviewInterface::STORE]);
-            }else {
-                $model->setApproved(false);
-            }
+            $model->setFakeCustomer($params[StoreReviewInterface::FAKE_CUSTOMER] ?? null);
+            $model->setApproved($params[StoreReviewInterface::APPROVED] ?? false);
+            $model->setSelected($params[StoreReviewInterface::SELECTED] ?? false);
+            $model->setStore($params[StoreReviewInterface::STORE] ?? null);
+
         } catch (\Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
             $store = $this->storeManager->getStore();
@@ -179,10 +183,8 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setTitle($params[StoreReviewInterface::TITLE]);
             $model->setStore($store->getId());
             $model->setWebsite($store->getWebsiteId());
-            $model->setCustomer($this->session->getCustomerId());
-            if($this->auth->isLoggedIn()){
-                $model->setCustomer(null);
-            }
+            $model->setCustomer($this->session->getCustomerId() ?? null);
+            $model->setFakeCustomer($params[StoreReviewInterface::FAKE_CUSTOMER] ?? null);
         }
         return $this->save($model);
     }
