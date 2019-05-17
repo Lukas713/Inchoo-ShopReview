@@ -181,4 +181,9 @@ class StoreReview extends AbstractModel implements StoreReviewInterface
     {
         return $this->getData(self::FAKE_CUSTOMER);
     }
+
+    public function getEmail()
+    {
+        return $this->getData(self::EMAIL);
+    }
 }

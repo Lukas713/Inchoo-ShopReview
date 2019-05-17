@@ -16,6 +16,7 @@ interface StoreReviewInterface
     const SELECTED = 'selected';
     const CONTENT = 'review_content';
     const TITLE = 'review_title';
+    const EMAIL = 'email';
     const TRUE = true;
     const FALSE = false;
 
@@ -134,4 +135,6 @@ interface StoreReviewInterface
      * @return string
      */
     public function getFakeCustomer();
+
+    public function getEmail();
 }
