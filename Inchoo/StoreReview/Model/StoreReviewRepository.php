@@ -148,6 +148,13 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
     {
         /** @var \Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection  $collection */
         $collection = $this->collectionFactory->create();
+        $joinCondition = 'main_table.customer = customer_entity.entity_id';
+        $collection->getSelect(
+        )->joinLeft(
+            'customer_entity',
+            $joinCondition,
+            []
+        )->columns('customer_entity.email');
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 

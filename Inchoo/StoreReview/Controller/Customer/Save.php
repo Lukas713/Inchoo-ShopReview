@@ -7,6 +7,7 @@ use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -42,9 +43,10 @@ class Save extends Redirecter
         StoreReviewRepositoryInterface $storeReviewRepository,
         Escaper $escaper,
         Session $session,
-        Http $request
+        Http $request,
+        Validator $validator
     ) {
-        parent::__construct($context, $session);
+        parent::__construct($context, $session, $validator);
         $this->storeReviewRepository = $storeReviewRepository;
         $this->escaper = $escaper;
         $this->session = $session;
@@ -54,7 +56,9 @@ class Save extends Redirecter
     public function execute()
     {
         $this->redirectIfNotLogged();
-        $params = $this->escapeHtml($this->request->getPost()->toArray()
+        $this->validateFormKey();
+        $params = $this->escapeHtml(
+            $this->request->getPost()->toArray()
         );
         if (isset($params[StoreReviewInterface::STORE_REVIEW_ID])) {
             try {
