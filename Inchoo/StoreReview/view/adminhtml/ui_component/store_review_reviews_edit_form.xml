@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">store_review_reviews_edit_form.store_review_reviews_edit_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <settings>
+        <namespace>store_review_pending_reviews_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>store_review_reviews_edit_form.store_review_reviews_edit_form_data_source</dep>
+        </deps>
+
+        <buttons>
+            <button name="back">
+                <label>Back</label>
+                <class>back</class>
+                <url path="store_review/reviews/index"/>
+            </button>
+            <button name="save">
+                <label translate="true">Save News</label>
+                <class>save primary</class>
+            </button>
+        </buttons>
+    </settings>
+
+    <dataSource name="store_review_reviews_edit_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="store_review/reviews/save"/>
+        </settings>
+        <dataProvider class="Inchoo\StoreReview\Ui\Component\Form\DataProvider" name="store_review_reviews_edit_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>store_review</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general">
+        <settings>
+            <label />
+        </settings>
+
+        <hidden name="store_review" sortOrder="1">
+            <settings>
+                <dataScope>store_review</dataScope>
+            </settings>
+        </hidden>
+
+        <input name="email" sortOrder="10">
+            <settings>
+                <label translate="true">Email</label>
+                <dataScope>email</dataScope>
+                <disabled>true</disabled>
+            </settings>
+        </input>
+
+        <input name="review_title" sortOrder="10">
+            <settings>
+                <label translate="true">Title</label>
+                <dataScope>review_title</dataScope>
+            </settings>
+        </input>
+
+        <textarea name="review_content" sortOrder="20">
+            <settings>
+                <label translate="true">Content</label>
+                <dataScope>review_content</dataScope>
+            </settings>
+        </textarea>
+
+        <field name="store" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>string</dataType>
+                <label translate="true">Store view</label>
+                <dataScope>store</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Inchoo\StoreReview\Model\StoreViewOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="approved" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Approved</label>
+                <dataScope>approved</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Inchoo\StoreReview\Model\ApprovedOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="selected" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">page</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>boolean</dataType>
+                <label translate="true">Selected</label>
+                <dataScope>selected</dataScope>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Inchoo\StoreReview\Model\SelectedOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

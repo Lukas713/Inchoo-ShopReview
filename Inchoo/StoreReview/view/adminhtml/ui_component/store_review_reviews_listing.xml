@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">store_review_pending_reviews_listing.store_review_pending_reviews_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>store_review_reviews_columns</spinner>
+        <deps>
+            <dep>store_review_reviews_listing.store_review_reviews_listing_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="create">
+                <url path="store_review/reviews/create"/>
+                <label translate="true">Create new</label>
+                <class>primary</class>
+            </button>
+        </buttons>
+    </settings>
+    <dataSource name="store_review_reviews_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">store_review</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Inchoo_StoreReview::pending_reviews</aclResource>
+        <dataProvider class="Inchoo\StoreReview\Ui\Component\Listing\DataProvider" name="store_review_reviews_listing_data_source">
+            <settings>
+                <requestFieldName>store_review</requestFieldName>
+                <primaryFieldName>store_review</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <settings>
+            <sticky>true</sticky>
+        </settings>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters">
+            <filterSelect name="store_id" provider="${ $.parentName }">
+                <settings>
+                    <options class="Magento\Store\Ui\Component\Listing\Column\Store\Options"/>
+                    <caption translate="true">All Store Views</caption>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_review</dataScope>
+                </settings>
+            </filterSelect>
+        </filters>
+        <paging name="listing_paging"/>
+        <massaction name="listing_massaction"
+                    component="Magento_Ui/js/grid/tree-massactions">
+            <action name="delete">
+                <settings>
+                    <confirm>
+                        <message translate="true">Delete selected items?</message>
+                        <title translate="true">Delete items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+            <action name="approve">
+                <settings>
+                    <confirm>
+                        <message translate="true">Approve selected items?</message>
+                        <title translate="true">Approve items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massApprove"/>
+                    <type>approve</type>
+                    <label translate="true">Approve</label>
+                </settings>
+            </action>
+            <action name="select">
+                <settings>
+                    <confirm>
+                        <message translate="true">Select selected items?</message>
+                        <title translate="true">Select items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massSelect"/>
+                    <type>select</type>
+                    <label translate="true">Select</label>
+                </settings>
+            </action>
+            <action name="unselect">
+                <settings>
+                    <confirm>
+                        <message translate="true">Unselect selected items?</message>
+                        <title translate="true">Unselect items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massUnselect"/>
+                    <type>unselect</type>
+                    <label translate="true">Unselect</label>
+                </settings>
+            </action>
+            <action name="disapprove">
+                <settings>
+                    <confirm>
+                        <message translate="true">Disapprove selected items?</message>
+                        <title translate="true">Disapprove items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massDisapprove"/>
+                    <type>disapprove</type>
+                    <label translate="true">Disapprove</label>
+                </settings>
+            </action>
+        </massaction>
+    </listingToolbar>
+    <columns name="store_review_reviews_columns">
+        <selectionsColumn name="ids">
+            <settings>
+                <indexField>store_review</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="review_title">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Title</label>
+            </settings>
+        </column>
+        <column name="email">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="fake_customer">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Fake Email</label>
+            </settings>
+        </column>
+        <column name="approved">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Approved</label>
+            </settings>
+        </column>
+        <column name="selected">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Selected</label>
+            </settings>
+        </column>
+        <column name="created_at">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Created at</label>
+            </settings>
+        </column>
+        <column name="updated_at">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Updated at</label>
+            </settings>
+        </column>
+        <actionsColumn name="action_edit" class="Inchoo\StoreReview\Ui\Component\Listing\Column\EditActions">
+            <settings>
+                <indexField>store_review</indexField>
+            </settings>
+        </actionsColumn>
+        <actionsColumn name="action_delete" class="Inchoo\StoreReview\Ui\Component\Listing\Column\DeleteActions">
+            <settings>
+                <indexField>store_review</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>
