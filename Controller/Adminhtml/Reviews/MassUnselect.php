@@ -2,7 +2,9 @@
 
 namespace Inchoo\StoreReview\Controller\Adminhtml\Reviews;
 
+use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Backend\App\Action;
 
 class MassUnselect extends Action
@@ -11,20 +13,27 @@ class MassUnselect extends Action
      * @var StoreReviewRepositoryInterface
      */
     private $storeReviewRepository;
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
     public function __construct(
         Action\Context $context,
-        StoreReviewRepositoryInterface $storeReviewRepository
+        StoreReviewRepositoryInterface $storeReviewRepository,
+        CollectionFactory $collectionFactory
     ) {
         parent::__construct($context);
         $this->storeReviewRepository = $storeReviewRepository;
+        $this->collectionFactory = $collectionFactory;
     }
 
     public function execute()
     {
         $result = $this->getRequest()->getParam("selected");
-        foreach ($result as $key => $value) {
-            $model = $this->storeReviewRepository->getById($value);
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter(StoreReviewInterface::STORE_REVIEW_ID, $result);
+        foreach ($collection as $model) {
             $model->setSelected(false);
             $this->storeReviewRepository->save($model);
         }

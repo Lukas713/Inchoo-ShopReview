@@ -54,9 +54,7 @@ class Save extends Redirecter
     {
         $this->redirectIfNotLogged();
         $this->validateFormKey();
-        $params = $this->escapeHtml(
-            $this->request->getPost()->toArray()
-        );
+        $params = $this->request->getPost()->toArray();
         if (isset($params[StoreReviewInterface::STORE_REVIEW_ID])) {
             try {
                 $model = $this->storeReviewRepository->getById($params[StoreReviewInterface::STORE_REVIEW_ID]);
@@ -81,13 +79,5 @@ class Save extends Redirecter
         );
         $this->messageManager->addSuccessMessage("Successfully");
         return $this->_redirect("store_review/customer");
-    }
-
-    protected function escapeHtml($result = [])
-    {
-        foreach ($result as $key => $value) {
-            $result[$key] = $this->escaper->escapeHtml($value);
-        }
-        return $result;
     }
 }

@@ -97,6 +97,17 @@
                     <label translate="true">Unselect</label>
                 </settings>
             </action>
+            <action name="selectApprove">
+                <settings>
+                    <confirm>
+                        <message translate="true">Select and approve selected items?</message>
+                        <title translate="true">Select and approve items</title>
+                    </confirm>
+                    <url path="store_review/reviews/massSelectApprove"/>
+                    <type>unselect</type>
+                    <label translate="true">Select and approve</label>
+                </settings>
+            </action>
             <action name="disapprove">
                 <settings>
                     <confirm>
