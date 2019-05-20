@@ -71,4 +71,8 @@ class Index extends Template
     public function getEditUrl($id){
         return $this->getUrl('store_review/customer/edit/id/' . $id);
     }
+
+    public function getDeleteUrl($id) {
+        return $this->getUrl('store_review/customer/delete/id/' . $id);
+    }
 }

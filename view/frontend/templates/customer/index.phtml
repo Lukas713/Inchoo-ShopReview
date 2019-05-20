@@ -34,7 +34,10 @@ $results = $block->getReviews();
                 <td><?=$block->escapeHtml($i->getUpdatedAt());?></td>
                 <td><?=$block->escapeHtml($block->getApprovedString($i->getApproved()));?></td>
                 <td><?=$block->escapeHtml($block->getStoreWithId($i->getStore()));?></td>
-                <td><a href="<?=$block->escapeHtml($block->getEditUrl($i->getId()));?>">Edit</a></td>
+                <td>
+                    <a href="<?=$block->escapeHtml($block->getDeleteUrl($i->getId()));?>">Delete</a>
+                    <a href="<?=$block->escapeHtml($block->getEditUrl($i->getId()));?>">Edit</a>
+                </td>
             </tr>
             <?php endforeach;  ?>
             </tbody>

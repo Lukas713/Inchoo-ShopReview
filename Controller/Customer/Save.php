@@ -22,10 +22,8 @@ class Save extends Redirecter
      * @var Escaper
      */
     private $escaper;
-    /**
-     * @var Session
-     */
-    private $session;
+
+
     /**
      * @var Http
      */

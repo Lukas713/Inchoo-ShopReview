@@ -21,10 +21,6 @@ class Create extends Redirecter
      */
     private $reviewRepository;
     /**
-     * @var Session
-     */
-    private $session;
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
