@@ -12,11 +12,11 @@ abstract class Redirecter extends Action
     /**
      * @var Session
      */
-    private $session;
+    protected $session;
     /**
      * @var Validator
      */
-    private $validator;
+    protected $validator;
 
     public function __construct(
         Context $context,
