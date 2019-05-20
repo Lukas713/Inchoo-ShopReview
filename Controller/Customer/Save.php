@@ -23,7 +23,6 @@ class Save extends Redirecter
      */
     private $escaper;
 
-
     /**
      * @var Http
      */
@@ -71,6 +70,15 @@ class Save extends Redirecter
             }
         }
         $this->storeReviewRepository->insertRecord($params);
+        $ticketParams = [
+            StoreReviewInterface::TITLE => $params[StoreReviewInterface::TITLE],
+            StoreReviewInterface::CONTENT => $params[StoreReviewInterface::CONTENT],
+            StoreReviewInterface::CUSTOMER => $this->session->getCustomerId()
+        ];
+        $this->_eventManager->dispatch(
+            'inchoo_ticket_created',
+            ['data' => $ticketParams]
+        );
         $this->messageManager->addSuccessMessage("Successfully");
         return $this->_redirect("store_review/customer");
     }

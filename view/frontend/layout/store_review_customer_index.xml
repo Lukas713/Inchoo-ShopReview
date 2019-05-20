@@ -3,7 +3,7 @@
     <body>
         <referenceContainer name="content">
             <block class="Inchoo\StoreReview\Block\Customer\Index" name="index"
-                   template="Inchoo_StoreReview::customer/index.phtml"/>
+                   template="Inchoo_StoreReview::customer/index.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>
