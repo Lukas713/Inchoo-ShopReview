@@ -55,6 +55,8 @@ class Create extends Redirecter
             $this->messageManager->addNoticeMessage("You can publish only one review per website");
             return $this->_redirect("store_review/customer");
         }
-        return $this->pageFactory->create();
+        $page = $this->pageFactory->create();
+        $page->getConfig()->getTitle()->set("Create Review");
+        return $page;
     }
 }

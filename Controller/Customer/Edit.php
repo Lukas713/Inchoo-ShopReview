@@ -28,8 +28,10 @@ class Edit extends Redirecter
     public function execute()
     {
         $this->redirectIfNotLogged();
+        $page = $this->pageFactory->create();
+        $page->getConfig()->getTitle()->set("Edit Review");
         if ($this->getRequest()->getParam('id') != '') {
-            return $this->pageFactory->create();
+            return $page;
         }
         $this->messageManager->addNoticeMessage("Something went wrong, please try again");
         return $this->_redirect("store_review/customer");

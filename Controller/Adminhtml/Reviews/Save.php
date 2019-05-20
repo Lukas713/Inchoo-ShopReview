@@ -36,17 +36,9 @@ class Save extends Action
 
     public function execute()
     {
-        $params = $this->escapeHtml($this->request->getPost()->toArray());
+        $params = $this->request->getPost()->toArray();
         $this->storeReviewRepository->insertRecord($params);
         $this->messageManager->addSuccessMessage("Successful");
         return $this->_redirect("store_review/reviews/index");
-    }
-
-    protected function escapeHtml($result = [])
-    {
-        foreach ($result as $key => $value) {
-            $result[$key] = $this->escaper->escapeHtml($value);
-        }
-        return $result;
     }
 }

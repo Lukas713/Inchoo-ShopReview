@@ -5,6 +5,7 @@ namespace Inchoo\StoreReview\Controller\Adminhtml\Reviews;
 
 
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Backend\App\Action;
 
 class MassDisapprove extends Action
@@ -13,15 +14,21 @@ class MassDisapprove extends Action
      * @var StoreReviewRepositoryInterface
      */
     private $storeReviewRepository;
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
 
     public function __construct
     (
         Action\Context $context,
-        StoreReviewRepositoryInterface $storeReviewRepository
+        StoreReviewRepositoryInterface $storeReviewRepository,
+        CollectionFactory $collectionFactory
     )
     {
         parent::__construct($context);
         $this->storeReviewRepository = $storeReviewRepository;
+        $this->collectionFactory = $collectionFactory;
     }
 
     public function execute()

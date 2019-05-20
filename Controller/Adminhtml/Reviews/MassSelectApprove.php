@@ -7,7 +7,7 @@ use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Backend\App\Action;
 
-class MassSelect extends Action
+class MassSelectApprove extends Action
 {
     /**
      * @var StoreReviewRepositoryInterface
@@ -19,7 +19,7 @@ class MassSelect extends Action
     private $collectionFactory;
 
     /**
-     * MassSelect constructor.
+     * MassDelete constructor.
      * @param Action\Context $context
      * @param StoreReviewRepositoryInterface $storeReviewRepository
      * @param CollectionFactory $collectionFactory
@@ -34,20 +34,17 @@ class MassSelect extends Action
         $this->collectionFactory = $collectionFactory;
     }
 
-    /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
     public function execute()
     {
-        $result = $this->getRequest()->getParam("selected");
+        $result = $this->getRequest()->getParam('selected');
         $collection = $this->collectionFactory->create();
         $collection->addFieldToFilter(StoreReviewInterface::STORE_REVIEW_ID, $result);
         foreach ($collection as $model) {
+            $model->setApproved(true);
             $model->setSelected(true);
             $this->storeReviewRepository->save($model);
         }
         $this->messageManager->addSuccessMessage("Successful");
-        return $this->_redirect("store_review/reviews");
+        return $this->_redirect("store_review/reviews/");
     }
 }
