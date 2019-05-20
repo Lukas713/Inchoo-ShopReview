@@ -25,6 +25,8 @@ class Index extends Action
 
     public function execute()
     {
-        return $this->pageFactory->create();
+        $page = $this->pageFactory->create();
+        $page->getConfig()->getTitle()->set("Reviews");
+        return $page;
     }
 }
