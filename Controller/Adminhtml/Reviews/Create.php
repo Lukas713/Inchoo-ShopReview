@@ -8,6 +8,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Create extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
     /**
      * @var PageFactory
      */

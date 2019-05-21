@@ -7,6 +7,8 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var PageFactory
      */

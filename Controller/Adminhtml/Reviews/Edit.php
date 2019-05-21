@@ -7,6 +7,8 @@ use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var PageFactory
      */

@@ -9,6 +9,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 class Delete extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var StoreReviewRepositoryInterface
      */

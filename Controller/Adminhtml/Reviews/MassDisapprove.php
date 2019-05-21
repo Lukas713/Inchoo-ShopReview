@@ -10,6 +10,8 @@ use Magento\Backend\App\Action;
 
 class MassDisapprove extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var StoreReviewRepositoryInterface
      */

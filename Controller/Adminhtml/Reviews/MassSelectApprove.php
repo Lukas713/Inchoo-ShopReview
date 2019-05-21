@@ -9,6 +9,8 @@ use Magento\Backend\App\Action;
 
 class MassSelectApprove extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var StoreReviewRepositoryInterface
      */

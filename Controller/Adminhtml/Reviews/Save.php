@@ -9,6 +9,8 @@ use Magento\Framework\Escaper;
 
 class Save extends Action
 {
+    const ADMIN_RESOURCE = 'Inchoo_StoreReview::reviews';
+
     /**
      * @var Http
      */
