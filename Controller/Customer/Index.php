@@ -19,7 +19,8 @@ class Index extends Redirecter
         PageFactory $pageFactory,
         Session $session,
         Validator $validator
-    ) {
+    )
+    {
         parent::__construct($context, $session, $validator);
         $this->pageFactory = $pageFactory;
     }
@@ -28,7 +29,7 @@ class Index extends Redirecter
     {
         $this->redirectIfNotLogged();
         $page = $this->pageFactory->create();
-        $page->getConfig()->getTitle()->set("My Reviews");
+        $page->getConfig()->getTitle()->set(__("My Reviews"));
         return $page;
     }
 }

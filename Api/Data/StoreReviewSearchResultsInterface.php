@@ -7,12 +7,12 @@ use Magento\Framework\Api\SearchResultsInterface;
 interface StoreReviewSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * @return \Inchoo\StoreReview\Api\Data\StoreReviewInterface[]
+     * @return StoreReviewInterface[]
      */
     public function getItems();
 
     /**
-     * @param \Inchoo\StoreReview\Api\Data\StoreReviewInterface[] $items
+     * @param StoreReviewInterface[] $items
      * @return $this
      */
     public function setItems(array $items);

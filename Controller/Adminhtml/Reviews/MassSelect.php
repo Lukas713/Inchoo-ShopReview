@@ -6,6 +6,9 @@ use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class MassSelect extends Action
 {
@@ -30,15 +33,16 @@ class MassSelect extends Action
         Action\Context $context,
         StoreReviewRepositoryInterface $storeReviewRepository,
         CollectionFactory $collectionFactory
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->storeReviewRepository = $storeReviewRepository;
         $this->collectionFactory = $collectionFactory;
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ResponseInterface|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {

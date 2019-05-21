@@ -5,59 +5,41 @@ namespace Inchoo\StoreReview\Block\Reviews;
 
 
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
-use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
 use Inchoo\StoreReview\Model\ResourceModel\StoreReview;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Test\Handler\Store\StoreInterface;
 
 class Index extends Template
 {
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-    /**
-     * @var StoreReviewRepositoryInterface
-     */
-    private $storeReviewRepository;
     /**
      * @var StoreManagerInterface
      */
     private $storeManager;
     /**
-     * @var StoreReview\CollectionFactory
+     * @var CollectionFactory
      */
     private $colection;
+
+    private $collectionFactory;
+
 
     public function __construct
     (
         Template\Context $context,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        StoreReviewRepositoryInterface $storeReviewRepository,
         StoreManagerInterface $storeManager,
-        \Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory $colectionFactory,
+        CollectionFactory $colectionFactory,
         array $data = []
     )
     {
         parent::__construct($context, $data);
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->storeReviewRepository = $storeReviewRepository;
         $this->storeManager = $storeManager;
-        $this->colection = $colectionFactory;
+        $this->collectionFactory = $colectionFactory;
     }
 
-    public function getReviews()
+    public function getPagerHtml()
     {
-        $store = $this->storeManager->getStore();
-        $this->searchCriteriaBuilder->addFilter(StoreReviewInterface::APPROVED, true);
-        $this->searchCriteriaBuilder->addFilter(StoreReviewInterface::SELECTED, true);
-        $this->searchCriteriaBuilder->addFilter(StoreReviewInterface::STORE, $store->getId());
-        $this->searchCriteriaBuilder->addFilter(StoreReviewInterface::WEBSITE, $store->getWebsiteId());
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-
-        return $this->storeReviewRepository->getList($searchCriteria)->getItems();
+        return $this->getChildHtml('pager');
     }
 
     protected function _prepareLayout()
@@ -78,24 +60,27 @@ class Index extends Template
         return $this;
     }
 
-    public function getPagerHtml()
-    {
-        return $this->getChildHtml('pager');
-    }
     public function getCustomCollection()
     {
-        $page = ($this->getRequest()->getParam('p')) ? $this->getRequest()->getParam('p') : 1;
-        $pageSize = ($this->getRequest()->getParam('limit')) ? $this->getRequest(
-
-        )->getParam('limit') : 5;
-        $collection = $this->colection->create();
+        if ($this->colection !== null) {
+            return $this->colection;
+        }
         $store = $this->storeManager->getStore();
-        $collection->addFieldToFilter(StoreReviewInterface::STORE, $store->getId());
-        $collection->addFieldToFilter(StoreReviewInterface::WEBSITE, $store->getWebsiteId());
-        $collection->addFieldToFilter(StoreReviewInterface::APPROVED, true);
-        $collection->addFieldToFilter(StoreReviewInterface::SELECTED, true);
-        $collection->setPageSize($pageSize);
-        $collection->setCurPage($page);
-        return $collection;
+        $this->colection = $this->collectionFactory->create()
+            ->addFieldToFilter(
+                StoreReviewInterface::APPROVED,
+                ['eq' => true]
+            )->addFieldToFilter(
+                StoreReviewInterface::SELECTED,
+                ['eq' => true]
+            )->addFieldToFilter(
+                StoreReviewInterface::STORE,
+                ['eq' => $store->getId()]
+            )->addFieldToFilter(
+                StoreReviewInterface::WEBSITE,
+                ['eq' => $store->getWebsiteId()]
+            );
+        return $this->colection;
+
     }
 }

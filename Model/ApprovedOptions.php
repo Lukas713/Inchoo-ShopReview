@@ -2,7 +2,6 @@
 
 namespace Inchoo\StoreReview\Model;
 
-use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
 class ApprovedOptions implements OptionSourceInterface
@@ -12,11 +11,11 @@ class ApprovedOptions implements OptionSourceInterface
         $options = [];
         $options[] = [
             'label' => 'Yes',
-            'value' => StoreReviewInterface::TRUE
+            'value' => true
         ];
         $options[] = [
             'label' => 'No',
-            'value' => StoreReviewInterface::FALSE
+            'value' => false
         ];
 
         return $options;

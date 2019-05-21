@@ -2,9 +2,13 @@
 
 namespace Inchoo\StoreReview\Model;
 
+use Exception;
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
+use Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory;
+use Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
-use Magento\Backend\Model\Auth;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection;
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
@@ -47,10 +51,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      * @var Session
      */
     private $session;
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
+
     /**
      * @var FilterGroupBuilder
      */
@@ -61,37 +62,36 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
     private $filterBuilder;
 
     /**
-     * @var Auth
+     * @var SearchCriteriaBuilder
      */
-    private $auth;
+    private $searchCriteriaBuilder;
 
     /**
      * StoreReviewRepository constructor.
-     * @param \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory
+     * @param StoreReviewInterfaceFactory $storeReviewInterfaceFactory
      * @param ResourceModel\StoreReview $storeReviewResource
      * @param ResourceModel\StoreReview\CollectionFactory $collectionFactory
-     * @param \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory
+     * @param StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param StoreManagerInterface $storeManager
      * @param Session $session
-     * @param SearchCriteriaBuilder $criteriaBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
-     * @param Auth $auth
      * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        \Inchoo\StoreReview\Api\Data\StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
+        StoreReviewInterfaceFactory $storeReviewInterfaceFactory,
         \Inchoo\StoreReview\Model\ResourceModel\StoreReview $storeReviewResource,
-        \Inchoo\StoreReview\Model\ResourceModel\StoreReview\CollectionFactory $collectionFactory,
-        \Inchoo\StoreReview\Api\Data\StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
+        CollectionFactory $collectionFactory,
+        StoreReviewSearchResultsInterfaceFactory $searchResultsInterfaceFactory,
         CollectionProcessorInterface $collectionProcessor,
         StoreManagerInterface $storeManager,
         Session $session,
-        SearchCriteriaBuilder $criteriaBuilder,
         FilterGroupBuilder $filterGroupBuilder,
-        Auth $auth,
-        FilterBuilder $filterBuilder
-    ) {
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder
+    )
+    {
         $this->storeReviewInterfaceFactory = $storeReviewInterfaceFactory;
         $this->collectionFactory = $collectionFactory;
         $this->storeReviewResource = $storeReviewResource;
@@ -99,71 +99,9 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->storeManager = $storeManager;
         $this->session = $session;
-        $this->criteriaBuilder = $criteriaBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
         $this->filterBuilder = $filterBuilder;
-        $this->auth = $auth;
-    }
-
-    /**
-     * Delete news.
-     *
-     * @param StoreReviewInterface $review
-     * @return bool true on success
-     * @throws LocalizedException
-     */
-    public function delete(StoreReview $review)
-    {
-        try {
-            $this->storeReviewResource->delete($review);
-            return true;
-        } catch (CouldNotDeleteException $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
-        }
-    }
-
-    /**
-     * Retrieve news.
-     *
-     * @param int
-     * @return StoreReviewInterface
-     * @throws LocalizedException
-     */
-    public function getById($id)
-    {
-        $model = $this->storeReviewInterfaceFactory->create();
-        $this->storeReviewResource->load($model, $id);
-        if (!$model->getId()) {
-            throw new NoSuchEntityException(__('News with id "%1" does not exist.', $id));
-        }
-        return $model;
-    }
-
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return StoreReviewInterface[]
-     * @throws LocalizedException
-     */
-    public function getList(SearchCriteriaInterface $searchCriteria)
-    {
-        /** @var \Inchoo\StoreReview\Model\ResourceModel\StoreReview\Collection  $collection */
-        $collection = $this->collectionFactory->create();
-        $joinCondition = 'main_table.customer = customer_entity.entity_id';
-        $collection->getSelect(
-        )->joinLeft(
-            'customer_entity',
-            $joinCondition,
-            []
-        )->columns('customer_entity.email');
-
-        $this->collectionProcessor->process($searchCriteria, $collection);
-
-        /** \Magento\Framework\Api\SearchResults $searchResult */
-        $searchResult = $this->searchResultsInterfaceFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
-        $searchResult->setItems($collection->getItems());
-        $searchResult->setTotalCount($collection->getSize());
-        return $searchResult;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -183,7 +121,7 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setSelected($params[StoreReviewInterface::SELECTED] ?? false);
             $model->setStore($params[StoreReviewInterface::STORE] ?? null);
 
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $model = $this->storeReviewInterfaceFactory->create();
             $store = $this->storeManager->getStore();
             $model->setContent($params[StoreReviewInterface::CONTENT]);
@@ -194,6 +132,23 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             $model->setFakeCustomer($params[StoreReviewInterface::FAKE_CUSTOMER] ?? null);
         }
         return $this->save($model);
+    }
+
+    /**
+     * Retrieve news.
+     *
+     * @param int
+     * @return StoreReviewInterface
+     * @throws LocalizedException
+     */
+    public function getById($id)
+    {
+        $model = $this->storeReviewInterfaceFactory->create();
+        $this->storeReviewResource->load($model, $id);
+        if (!$model->getId()) {
+            throw new NoSuchEntityException(__('News with id "%1" does not exist.', $id));
+        }
+        return $model;
     }
 
     /**
@@ -220,24 +175,54 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
      */
     public function getByStore($params = [])
     {
-        $filter = $this->filterBuilder->create();
-        $filter->setField(StoreReviewInterface::WEBSITE);
-        $filter->setValue($params[StoreReviewInterface::WEBSITE]);
+        $filters = [];
 
-        $filter1 = $this->filterBuilder->create();
-        $filter1->setField(StoreReviewInterface::CUSTOMER);
-        $filter1->setValue($params[StoreReviewInterface::CUSTOMER]);
+        $filters[] = $this->filterBuilder->setField(
+            StoreReviewInterface::CUSTOMER
+        )->setValue(
+            $params[StoreReviewInterface::CUSTOMER]
+        )->setConditionType(
+            'eq'
+        )->create();
 
-        $this->filterGroupBuilder->addFilter($filter);
-        $filterGroup = $this->filterGroupBuilder->create();
+        $filters[] = $this->filterBuilder->setField(
+            StoreReviewInterface::WEBSITE
+        )->setValue(
+            $params[StoreReviewInterface::WEBSITE]
+        )->setConditionType(
+            'eq'
+        )->create();
 
-        $this->filterGroupBuilder->addFilter($filter1);
-        $filterGroup1 = $this->filterGroupBuilder->create();
-
-        $searchCriteria = $this->criteriaBuilder->create();
-        $searchCriteria->setFilterGroups([$filterGroup, $filterGroup1]);
+        $this->searchCriteriaBuilder->addFilters($filters);
+        $searchCriteria = $this->searchCriteriaBuilder->create();
 
         return $this->getList($searchCriteria);
+    }
+
+    /**
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return StoreReviewInterface[]
+     * @throws LocalizedException
+     */
+    public function getList(SearchCriteriaInterface $searchCriteria)
+    {
+        /** @var Collection $collection */
+        $collection = $this->collectionFactory->create();
+        $joinCondition = 'main_table.customer = customer_entity.entity_id';
+        $collection->getSelect()->joinLeft(
+            'customer_entity',
+            $joinCondition,
+            []
+        )->columns('customer_entity.email');
+
+        $this->collectionProcessor->process($searchCriteria, $collection);
+
+        /** \Magento\Framework\Api\SearchResults $searchResult */
+        $searchResult = $this->searchResultsInterfaceFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
     }
 
     public function deleteById($id)
@@ -248,5 +233,22 @@ class StoreReviewRepository implements StoreReviewRepositoryInterface
             throw new $exception();
         }
         return $this->delete($model);
+    }
+
+    /**
+     * Delete news.
+     *
+     * @param StoreReviewInterface $review
+     * @return bool true on success
+     * @throws LocalizedException
+     */
+    public function delete(StoreReview $review)
+    {
+        try {
+            $this->storeReviewResource->delete($review);
+            return true;
+        } catch (CouldNotDeleteException $exception) {
+            throw new CouldNotDeleteException(__($exception->getMessage()));
+        }
     }
 }

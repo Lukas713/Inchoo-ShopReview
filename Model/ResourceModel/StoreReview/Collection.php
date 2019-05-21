@@ -2,6 +2,7 @@
 
 namespace Inchoo\StoreReview\Model\ResourceModel\StoreReview;
 
+use Inchoo\StoreReview\Model\ResourceModel\StoreReview;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 class Collection extends AbstractCollection
@@ -10,7 +11,7 @@ class Collection extends AbstractCollection
     {
         $this->_init(
             \Inchoo\StoreReview\Model\StoreReview::class,
-            \Inchoo\StoreReview\Model\ResourceModel\StoreReview::class
-            );
+            StoreReview::class
+        );
     }
 }

@@ -17,8 +17,6 @@ interface StoreReviewInterface
     const CONTENT = 'review_content';
     const TITLE = 'review_title';
     const EMAIL = 'email';
-    const TRUE = true;
-    const FALSE = false;
 
 
     /**

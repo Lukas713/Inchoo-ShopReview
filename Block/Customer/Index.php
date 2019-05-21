@@ -1,8 +1,10 @@
 <?php
 
 namespace Inchoo\StoreReview\Block\Customer;
+
 use Inchoo\StoreReview\Api\Data\StoreReviewInterface;
 use Inchoo\StoreReview\Api\StoreReviewRepositoryInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\Template;
 use Magento\Store\Model\StoreManagerInterface;
@@ -32,7 +34,7 @@ class Index extends Template
         Template\Context $context,
         StoreReviewRepositoryInterface $reviewRepository,
         SearchCriteriaBuilder $criteriaBuilder,
-        \Magento\Customer\Model\Session $session,
+        Session $session,
         StoreManagerInterface $storeManager,
         array $data = []
     )
@@ -68,11 +70,13 @@ class Index extends Template
         return (int)$i == 0 ? "No" : "Yes";
     }
 
-    public function getEditUrl($id){
+    public function getEditUrl($id)
+    {
         return $this->getUrl('store_review/customer/edit/id/' . $id);
     }
 
-    public function getDeleteUrl($id) {
+    public function getDeleteUrl($id)
+    {
         return $this->getUrl('store_review/customer/delete/id/' . $id);
     }
 }

@@ -22,7 +22,8 @@ abstract class Redirecter extends Action
         Context $context,
         Session $session,
         Validator $validator
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->session = $session;
         $this->validator = $validator;

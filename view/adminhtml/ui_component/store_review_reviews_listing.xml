@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">store_review_pending_reviews_listing.store_review_pending_reviews_listing_data_source</item>
+            <item name="provider" xsi:type="string">
+                store_review_pending_reviews_listing.store_review_pending_reviews_listing_data_source
+            </item>
         </item>
     </argument>
     <settings>
@@ -27,7 +30,8 @@
             <updateUrl path="mui/index/render"/>
         </settings>
         <aclResource>Inchoo_StoreReview::pending_reviews</aclResource>
-        <dataProvider class="Inchoo\StoreReview\Ui\Component\Listing\DataProvider" name="store_review_reviews_listing_data_source">
+        <dataProvider class="Inchoo\StoreReview\Ui\Component\Listing\DataProvider"
+                      name="store_review_reviews_listing_data_source">
             <settings>
                 <requestFieldName>store_review</requestFieldName>
                 <primaryFieldName>store_review</primaryFieldName>

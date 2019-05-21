@@ -18,10 +18,6 @@ class Save extends Redirecter
      */
     private $storeReviewRepository;
 
-    /**
-     * @var Escaper
-     */
-    private $escaper;
 
     /**
      * @var Http
@@ -38,14 +34,13 @@ class Save extends Redirecter
     public function __construct(
         Context $context,
         StoreReviewRepositoryInterface $storeReviewRepository,
-        Escaper $escaper,
         Session $session,
         Http $request,
         Validator $validator
-    ) {
+    )
+    {
         parent::__construct($context, $session, $validator);
         $this->storeReviewRepository = $storeReviewRepository;
-        $this->escaper = $escaper;
         $this->session = $session;
         $this->request = $request;
     }

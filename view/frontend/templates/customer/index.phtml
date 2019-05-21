@@ -14,32 +14,32 @@ $results = $block->getReviews();
     </div>
 </div>
 <br>
-    <div class="table-wrapper orders-history">
-        <table class="table">
-            <thead>
+<div class="table-wrapper orders-history">
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Title</td>
+            <td>Created at</td>
+            <td>Updated at</td>
+            <td>Approved</td>
+            <td>Store</td>
+            <td>Action</td>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($results as $review): ?>
             <tr>
-                <td>Title</td>
-                <td>Created at</td>
-                <td>Updated at</td>
-                <td>Approved</td>
-                <td>Store</td>
-                <td>Action</td>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach($results as $i): ?>
-            <tr>
-                <td><?=$block->escapeHtml($i->getTitle());?></td>
-                <td><?=$block->escapeHtml($i->getCreatedAt());?></td>
-                <td><?=$block->escapeHtml($i->getUpdatedAt());?></td>
-                <td><?=$block->escapeHtml($block->getApprovedString($i->getApproved()));?></td>
-                <td><?=$block->escapeHtml($block->getStoreWithId($i->getStore()));?></td>
+                <td><?= $block->escapeHtml($review->getTitle()); ?></td>
+                <td><?= $block->escapeHtml($review->getCreatedAt()); ?></td>
+                <td><?= $block->escapeHtml($review->getUpdatedAt()); ?></td>
+                <td><?= $block->escapeHtml($block->getApprovedString($review->getApproved())); ?></td>
+                <td><?= $block->escapeHtml($block->getStoreWithId($review->getStore())); ?></td>
                 <td>
-                    <a href="<?=$block->escapeHtml($block->getDeleteUrl($i->getId()));?>">Delete</a>
-                    <a href="<?=$block->escapeHtml($block->getEditUrl($i->getId()));?>">Edit</a>
+                    <a href="<?= $block->escapeHtml($block->getDeleteUrl($review->getId())); ?>">Delete</a>
+                    <a href="<?= $block->escapeHtml($block->getEditUrl($review->getId())); ?>">Edit</a>
                 </td>
             </tr>
-            <?php endforeach;  ?>
-            </tbody>
-        </table>
-    </div>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

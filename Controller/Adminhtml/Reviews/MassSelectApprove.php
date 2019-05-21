@@ -30,7 +30,8 @@ class MassSelectApprove extends Action
         Action\Context $context,
         StoreReviewRepositoryInterface $storeReviewRepository,
         CollectionFactory $collectionFactory
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->storeReviewRepository = $storeReviewRepository;
         $this->collectionFactory = $collectionFactory;

@@ -4,45 +4,45 @@
  */
 $model = $block->checkCustomerAndReviewId();
 ?>
-<?php if(!$model): ?>
-<a href="<?=$block->getFrontPage();?>">Back</a>
+<?php if (!$model): ?>
+    <a href="<?= $block->getFrontPage(); ?>">Back</a>
     <?php
     return;
-    else:
-        ?>
-<form class="form" action="<?= $block->getSavePage() ?>" id="ticket-form" method="post"
-      data-mage-init='{"validation":{}}' data-hasrequired="* Required Fields">
-    <fieldset class="fieldset">
-        <div class="field name required">
-            <label class="label" for="subject">
-                <span><?= $block->escapeHtml('Title') ?></span>
-            </label>
-            <div class="control">
-                <input name="review_title" id="review_title"
-                       data-validate='{"required":true}'
-                       title="Review title" value="<?=$block->escapeHtml($model->getTitle());?>"
-                       class="input-text" type="text"/>
+else:
+    ?>
+    <form class="form" action="<?= $block->getSavePage() ?>" id="ticket-form" method="post"
+          data-mage-init='{"validation":{}}' data-hasrequired="* Required Fields">
+        <fieldset class="fieldset">
+            <div class="field name required">
+                <label class="label" for="subject">
+                    <span><?= $block->escapeHtml('Title') ?></span>
+                </label>
+                <div class="control">
+                    <input name="review_title" id="review_title"
+                           data-validate='{"required":true}'
+                           title="Review title" value="<?= $block->escapeHtml($model->getTitle()); ?>"
+                           class="input-text" type="text"/>
+                </div>
             </div>
-        </div>
-        <div class="field name required">
-            <label class="label" for="message">
-                <span><?= $block->escapeHtml('Content') ?></span>
-            </label>
-            <div class="control">
+            <div class="field name required">
+                <label class="label" for="message">
+                    <span><?= $block->escapeHtml('Content') ?></span>
+                </label>
+                <div class="control">
                 <textarea name="review_content" id="review_content"
                           data-validate='{"required":true}'
                           title="Review Content"
-                          class="input-text" type="text"><?=$block->escapeHtml($model->getContent());?></textarea>
+                          class="input-text" type="text"><?= $block->escapeHtml($model->getContent()); ?></textarea>
+                </div>
+            </div>
+            <input type="hidden" name="store_review" value="<?= $block->escapeHtml($model->getId()); ?>">
+        </fieldset>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button type="submit" title="Save" class="action submit primary" name="submit">
+                    <span><?= $block->escapeHtml('Submit'); ?></span>
+                </button>
             </div>
         </div>
-        <input type="hidden" name="store_review" value="<?=$block->escapeHtml($model->getId());?>">
-    </fieldset>
-    <div class="actions-toolbar">
-        <div class="primary">
-            <button type="submit" title="Save" class="action submit primary" name="submit">
-                <span><?= $block->escapeHtml('Submit'); ?></span>
-            </button>
-        </div>
-    </div>
-</form>
-<?php endif;?>
+    </form>
+<?php endif; ?>

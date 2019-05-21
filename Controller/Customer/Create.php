@@ -32,7 +32,8 @@ class Create extends Redirecter
         StoreReviewRepository $reviewRepository,
         StoreManagerInterface $storeManager,
         Validator $validator
-    ) {
+    )
+    {
         parent::__construct($context, $session, $validator);
         $this->pageFactory = $pageFactory;
         $this->reviewRepository = $reviewRepository;
@@ -56,7 +57,7 @@ class Create extends Redirecter
             return $this->_redirect("store_review/customer");
         }
         $page = $this->pageFactory->create();
-        $page->getConfig()->getTitle()->set("Create Review");
+        $page->getConfig()->getTitle()->set(__("Create Review"));
         return $page;
     }
 }

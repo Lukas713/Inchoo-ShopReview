@@ -1,22 +1,23 @@
 <?php if ($block->getPagerHtml()): ?>
-    <div class="order-products-toolbar toolbar bottom"><?=$block->getPagerHtml(); ?></div>
+    <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml(); ?></div>
 <?php endif ?>
 <?php
-    /**
-     * @var \Inchoo\StoreReview\Block\Reviews\Index $block
-     */
-        $results = $block->getReviews();
-    ?>
-<?php foreach($results as $storeReview):
+/**
+ * @var \Inchoo\StoreReview\Block\Reviews\Index $block
+ */
+$results = $block->getReviews();
+?>
+<?php foreach ($results as $storeReview):
     $created = $storeReview->getEmail() ?? $storeReview->getFakeCustomer();
     ?>
     <div class="products wrapper grid products-grid">
         <div class="card-body" style="padding:2rem">
-            <h3 class="card-title">Title: <?=$block->escapeHtml($storeReview->getTitle());?></h3><hr>
-            <h2 class="card-subtitle mb-2 text-muted">Customer: <?=$block->escapeHtml($created);?></h2>
-            <p class="card-text">Review: <?=$block->escapeHtml($storeReview->getContent());?></p>
-            <span>Created: <?=$block->escapeHtml($storeReview->getCreatedAt());?></span><br>
-            <span>Updated: <?=$block->escapeHtml($storeReview->getUpdatedAt());?></span>
+            <h3 class="card-title">Title: <?= $block->escapeHtml($storeReview->getTitle()); ?></h3>
+            <hr>
+            <h2 class="card-subtitle mb-2 text-muted">Customer: <?= $block->escapeHtml($created); ?></h2>
+            <p class="card-text">Review: <?= $block->escapeHtml($storeReview->getContent()); ?></p>
+            <span>Created: <?= $block->escapeHtml($storeReview->getCreatedAt()); ?></span><br>
+            <span>Updated: <?= $block->escapeHtml($storeReview->getUpdatedAt()); ?></span>
         </div>
     </div>
-<?php endforeach;?>
+<?php endforeach; ?>

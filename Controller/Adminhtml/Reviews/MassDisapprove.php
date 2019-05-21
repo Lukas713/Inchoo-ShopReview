@@ -36,7 +36,7 @@ class MassDisapprove extends Action
     public function execute()
     {
         $result = $this->getRequest()->getParam("selected");
-        foreach($result as $key => $value){
+        foreach ($result as $key => $value) {
             $model = $this->storeReviewRepository->getById($value);
             $model->setApproved(false);
             $this->storeReviewRepository->save($model);

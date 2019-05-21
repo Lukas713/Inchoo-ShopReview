@@ -24,7 +24,7 @@ class StoreViewOptions implements OptionSourceInterface
     {
         $options = [];
         $stores = $this->storeManager->getStores();
-        foreach($stores as $store){
+        foreach ($stores as $store) {
             $options[] = [
                 'label' => $store->getName(),
                 'value' => $store->getId()
